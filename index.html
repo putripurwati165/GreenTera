@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenTera - Digital Green Economy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandPurple: {
+                            DEFAULT: '#7C3AED',
+                            light: '#8B5CF6',
+                            dark: '#6D28D9',
+                            bg: '#F5F3FF'
+                        },
+                        mintBg: '#F0FDF4'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #splash-screen {
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-mintBg text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <div id="splash-screen" class="fixed inset-0 z-50 bg-[#F0FDF4] flex flex-col items-center justify-center p-6">
+        <div class="text-center space-y-6 max-w-md w-full">
+            <div class="w-40 h-40 md:w-48 md:h-48 mx-auto rounded-3xl shadow-2xl bg-white border-2 border-emerald-600/30 flex items-center justify-center p-4">
+                <div class="w-28 h-28">
+                    <div class="absolute inset-0 border border-white/30 rounded-2xl"></div>
+                    <img src="logoo.png">
+                </div>
+            </div>
+            <div>
+                <h1 class="text-3xl md:text-4xl font-extrabold" style="color: green;">Green<span style="color: rebeccapurple;">Tera</span></h1>
+            </div>
+            <div class="pt-2">
+                <button onclick="dismissSplash()" class="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-bold px-8 py-4 rounded-2xl shadow-xl transition transform hover:scale-105 duration-200 text-sm tracking-wide">
+                    Masuk ke Platform <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <header class="sticky top-0 z-40 bg-mintBg/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer group" onclick="switchPage('hero')">
+                <div class="w-11 h-11">
+                    <img src="logoo.png">
+                </div>
+                <div>
+                    <span class="text-2xl font-black bg-gradient-to-r from-emerald-700 to-green-900 bg-clip-text text-transparent"style="color: green;">Green<span style="color: rebeccapurple;">Tera</span></span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 bg-white/90 p-1.5 rounded-full border border-slate-200 shadow-sm">
+                <button onclick="switchPage('hero')" id="nav-hero" class="nav-btn px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 text-brandPurple bg-white shadow-sm">Overview</button>
+                <button onclick="switchPage('program-overview')" id="nav-program-overview" class="nav-btn px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 text-slate-600 hover:text-brandPurple">Program Overview</button>
+                <button onclick="switchPage('mapping')" id="nav-mapping" class="nav-btn px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 text-slate-600 hover:text-brandPurple">Location Mapping</button>
+                <button onclick="switchPage('stakeholders')" id="nav-stakeholders" class="nav-btn px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 text-slate-600 hover:text-brandPurple">Stakeholders</button>
+                <button onclick="switchPage('volunteer')" id="nav-volunteer" class="nav-btn px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 text-slate-600 hover:text-brandPurple">Volunteers</button>
+                <button onclick="switchPage('dashboard')" id="nav-dashboard" class="nav-btn px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 text-slate-600 hover:text-brandPurple">Dashboard</button>
+            </nav>
+
+            <div class="flex items-center space-x-3 relative">
+                <div class="relative">
+                    <button onclick="toggleUserDropdown()" class="w-11 h-11 rounded-2xl bg-brandPurple/10 hover:bg-brandPurple/20 text-brandPurple flex items-center justify-center transition duration-200 shadow-sm border border-brandPurple/20" title="Akun & Profil">
+                        <i class="fa-solid fa-user text-base"></i>
+                    </button>
+                    <div id="user-dropdown" class="hidden absolute right-0 mt-3 w-64 bg-white rounded-3xl shadow-2xl border border-slate-200 py-3 px-2 z-50">
+                        <div class="px-4 py-2 border-b border-slate-100 mb-2">
+                            <p class="text-xs font-bold text-slate-400 uppercase">Akun Pengguna</p>
+                            <p id="auth-status-text" class="text-sm font-bold text-slate-800">Tamu (Belum Masuk)</p>
+                        </div>
+                        <button onclick="openAuthModal('login'); toggleUserDropdown();" class="w-full text-left px-4 py-2.5 rounded-2xl text-sm font-semibold text-slate-700 hover:bg-brandPurple-bg hover:text-brandPurple transition flex items-center space-x-2">
+                            <i class="fa-solid fa-right-to-bracket text-brandPurple"></i>
+                            <span>Masuk (Login)</span>
+                        </button>
+                        <button onclick="openAuthModal('register'); toggleUserDropdown();" class="w-full text-left px-4 py-2.5 rounded-2xl text-sm font-semibold text-slate-700 hover:bg-brandPurple-bg hover:text-brandPurple transition flex items-center space-x-2">
+                            <i class="fa-solid fa-user-plus text-brandPurple"></i>
+                            <span>Daftar (Sign Up)</span>
+                        </button>
+                        <div class="border-t border-slate-100 my-2"></div>
+                        <button onclick="switchPage('activity'); toggleUserDropdown();" class="w-full text-left px-4 py-2.5 rounded-2xl text-sm font-semibold text-slate-700 hover:bg-brandPurple-bg hover:text-brandPurple transition flex items-center space-x-2">
+                            <i class="fa-solid fa-clock-rotate-left text-brandPurple"></i>
+                            <span>Aktivitas Saya</span>
+                        </button>
+                        <button onclick="switchPage('profile'); toggleUserDropdown();" class="w-full text-left px-4 py-2.5 rounded-2xl text-sm font-semibold text-slate-700 hover:bg-brandPurple-bg hover:text-brandPurple transition flex items-center space-x-2">
+                            <i class="fa-solid fa-id-card text-brandPurple"></i>
+                            <span>Pengaturan Profil</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-2xl bg-white hover:bg-slate-100 text-slate-700 flex flex-col justify-center items-center w-11 h-11 space-y-1.5 focus:outline-none shadow-sm">
+                    <span class="w-6 h-0.5 bg-slate-700 rounded-full transition-all"></span>
+                    <span class="w-6 h-0.5 bg-slate-700 rounded-full transition-all"></span>
+                    <span class="w-6 h-0.5 bg-slate-700 rounded-full transition-all"></span>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-5 space-y-2 shadow-xl">
+            <button onclick="switchPage('hero'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-brandPurple-bg hover:text-brandPurple">Overview</button>
+            <button onclick="switchPage('program-overview'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-brandPurple-bg hover:text-brandPurple">Program Overview</button>
+            <button onclick="switchPage('mapping'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-brandPurple-bg hover:text-brandPurple">Location Mapping</button>
+            <button onclick="switchPage('stakeholders'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-brandPurple-bg hover:text-brandPurple">Stakeholders</button>
+            <button onclick="switchPage('volunteer'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-brandPurple-bg hover:text-brandPurple">Volunteers</button>
+            <button onclick="switchPage('dashboard'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-brandPurple-bg hover:text-brandPurple">Dashboard</button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Hero Section -->
+        <section id="page-hero" class="page-section active space-y-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-4">
+                <div class="space-y-6">
+                    <div class="inline-flex items-center space-x-2 bg-brandPurple-bg text-brandPurple px-4 py-2 rounded-full text-xs font-bold border border-purple-200 shadow-sm">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Inovasi Digital Green Economy</span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+                        Transformasi Limbah Menjadi Nilai Ekonomi
+                    </h1>
+                    <p class="text-slate-600 text-base md:text-lg leading-relaxed">
+                        GreenTera menghubungkan pemasok limbah domestik dan eceng gondok dengan perajin lokal (UMKM) melalui platform yang aman, rahasia, dan berdampak nyata bagi lingkungan.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <button onclick="switchPage('stakeholders')" class="bg-brandPurple hover:bg-brandPurple-dark text-white font-bold px-7 py-4 rounded-2xl shadow-xl transition flex items-center space-x-2 text-sm">
+                            <span>Mulai Jual/Beli</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button onclick="switchPage('mapping')" class="bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-bold px-7 py-4 rounded-2xl shadow-sm transition flex items-center space-x-2 text-sm">
+                            <i class="fa-solid fa-map-location-dot text-emerald-600"></i>
+                            <span>Lapor Titik Limbah</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative flex justify-center">
+                    <div class="w-full max-w-md bg-gradient-to-tr from-emerald-100 to-mintBg p-8 rounded-3xl border border-emerald-200/60 shadow-xl relative overflow-hidden">
+                        <div class="grid grid-cols-2 gap-4 relative z-10">
+                            <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 flex flex-col items-center text-center space-y-2">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shadow-sm">
+                                    <i class="fa-solid fa-recycle"></i>
+                                </div>
+                                <span class="font-bold text-slate-800 text-sm">Recycle</span>
+                            </div>
+                            <div class="bg-brandPurple text-white p-6 rounded-2xl shadow-md flex flex-col items-center text-center space-y-2">
+                                <div class="w-12 h-12 rounded-2xl bg-white/20 text-white flex items-center justify-center text-xl shadow-sm">
+                                    <i class="fa-solid fa-handshake"></i>
+                                </div>
+                                <span class="font-bold text-white text-sm">Connect</span>
+                            </div>
+                            <div class="bg-[#00B050] text-white p-6 rounded-2xl shadow-md flex flex-col items-center text-center space-y-2">
+                                <div class="w-12 h-12 rounded-2xl bg-white/20 text-white flex items-center justify-center text-xl shadow-sm">
+                                    <i class="fa-solid fa-chart-line"></i>
+                                </div>
+                                <span class="font-bold text-white text-sm">Impact</span>
+                            </div>
+                            <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 flex flex-col items-center text-center space-y-2">
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shadow-sm">
+                                    <i class="fa-solid fa-leaf"></i>
+                                </div>
+                                <span class="font-bold text-slate-800 text-sm">Eco-Friendly</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Program Overview Section -->
+        <section id="page-program-overview" class="page-section space-y-10">
+            <div class="text-center space-y-3 max-w-3xl mx-auto pt-4">
+                <span class="text-xs font-bold uppercase tracking-widest text-[#00B050]">PROGRAM OVERVIEW</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 leading-tight">Membangun Ekosistem Hijau yang<br>Berkelanjutan</h2>
+                <p class="text-slate-600 text-base leading-relaxed">Platform yang menjembatani masalah lingkungan dengan potensi ekonomi sirkular masyarakat.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-brandPurple-bg text-brandPurple flex items-center justify-center text-2xl mb-6 shadow-sm">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Visi</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">Menjadi katalisator utama dalam mewujudkan ekonomi sirkular berbasis komunitas di Indonesia yang bersih, inklusif, dan bernilai tambah tinggi.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-xs font-bold text-brandPurple flex items-center">
+                        <span>Pilar Lingkungan & Sosial</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center text-2xl mb-6 shadow-sm">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Misi</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">Mengoptimalkan pemanfaatan limbah tekstil dan pembersihan gulma eceng gondok perairan melalui rantai pasok digital yang aman, transparan, dan memberdayakan UMKM.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-xs font-bold text-purple-700 flex items-center">
+                        <span>Pemberdayaan Digital</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-100/50 rounded-bl-full pointer-events-none"></div>
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-[#00B050] flex items-center justify-center text-2xl mb-6 shadow-sm">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Tujuan</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">Mengurangi jejak karbon, membersihkan perairan dari eceng gondok, dan meningkatkan kesejahteraan perajin lokal lewat bahan baku murah.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-xs font-bold text-[#00B050] flex items-center">
+                        <span>Target Berkelanjutan 2030</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location Mapping Section -->
+        <section id="page-mapping" class="page-section space-y-8">
+            <div class="bg-white p-6 md:p-10 rounded-3xl border border-slate-200 shadow-sm max-w-4xl mx-auto">
+                <div class="rounded-3xl bg-[#00B050] text-white p-8 mb-8 shadow-md">
+                    <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Lapor Titik Limbah</h2>
+                    <p class="text-white/90 text-sm md:text-base mb-6 leading-relaxed">Bantu kami memetakan lokasi limbah domestik (seperti limbah tekstil) atau perairan yang dipenuhi eceng gondok di sekitar Anda. Laporan Anda menentukan langkah pembersihan!</p>
+                    <div class="space-y-2.5 text-sm font-medium">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-check text-white"></i>
+                            <span>Identifikasi area terdampak cepat.</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-check text-white"></i>
+                            <span>Relawan lapangan langsung bertindak.</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-check text-white"></i>
+                            <span>Mendukung bahan baku UMKM.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form onsubmit="handleReportSubmit(event)" class="space-y-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Nama Lokasi / Daerah</label>
+                        <input type="text" id="rep-lokasi" required placeholder="Contoh: Sungai Ciliwung, Jembatan Merah" class="w-full px-4 py-3.5 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-[#00B050] focus:border-[#00B050] outline-none transition text-sm">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Jenis Limbah</label>
+                            <select id="rep-jenis" required class="w-full px-4 py-3.5 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-[#00B050] focus:border-[#00B050] outline-none transition bg-white text-sm">
+                                <option value="" disabled selected>Pilih Jenis...</option>
+                                <option value="Perairan Eceng Gondok Menumpuk">Perairan Eceng Gondok Menumpuk</option>
+                                <option value="Limbah Domestik / Plastik / Rumah Tangga">Limbah Domestik / Plastik / Rumah Tangga</option>
+                                <option value="Limbah Tekstil / Konveksi">Limbah Tekstil / Konveksi</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Estimasi Volume/Luas</label>
+                            <input type="text" id="rep-volume" required placeholder="Cth: Sangat banyak / ~50 meter" class="w-full px-4 py-3.5 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-[#00B050] focus:border-[#00B050] outline-none transition text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Unggah Foto Lokasi / Kondisi Limbah</label>
+                        <div class="flex items-center space-x-4">
+                            <label class="cursor-pointer bg-mintBg border border-emerald-300 hover:bg-emerald-100 text-emerald-700 font-semibold px-5 py-2.5 rounded-xl shadow-sm text-sm transition">
+                                <span>Choose file</span>
+                                <input type="file" id="rep-foto" accept="image/*" class="hidden" onchange="updateFileName(this)">
+                            </label>
+                            <span id="file-chosen-label" class="text-sm text-slate-500 italic">No file chosen</span>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full bg-[#00B050] hover:bg-[#009944] text-white font-bold py-4 rounded-2xl shadow-xl transition duration-200 text-sm tracking-wide">
+                            Kirim Laporan <i class="fa-solid fa-paper-plane ml-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Stakeholders Section -->
+        <section id="page-stakeholders" class="page-section space-y-8">
+            <div class="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm text-center space-y-3 max-w-4xl mx-auto">
+                <span class="text-xs font-bold uppercase tracking-wider text-brandPurple">STAKEHOLDER OFFERINGS</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Sirkular Ekonomi di Tangan Anda</h2>
+                <p class="text-slate-600 text-sm max-w-lg mx-auto">Jual limbah Anda atau beli bahan baku baku dengan aman.</p>
+                <div class="inline-flex items-center space-x-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl text-xs font-semibold border border-emerald-200/60 shadow-sm mt-2">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Data Pribadi Terenkripsi & Dirahasiakan</span>
+                </div>
+            </div>
+
+            <div class="flex justify-center mb-6">
+                <div class="flex space-x-2 bg-slate-100 p-1.5 rounded-2xl shadow-sm">
+                    <button onclick="switchStakeholderTab('supplier')" id="btn-tab-supplier" class="stakeholder-tab-btn px-6 py-2.5 rounded-xl text-sm font-semibold transition bg-white text-brandPurple shadow-sm">Supplier Limbah (Sales)</button>
+                    <button onclick="switchStakeholderTab('customer')" id="btn-tab-customer" class="stakeholder-tab-btn px-6 py-2.5 rounded-xl text-sm font-semibold transition text-slate-600 hover:text-slate-900">Customer UMKM (Purchase)</button>
+                </div>
+            </div>
+
+            <div id="stakeholder-supplier" class="stakeholder-content bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-6 max-w-4xl mx-auto relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-[#00B050] text-white text-[11px] font-bold px-4 py-1.5 rounded-bl-2xl shadow-sm flex items-center space-x-1.5">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Supplier Data Protected</span>
+                </div>
+                <div class="flex items-center space-x-4 mb-2">
+                    <div class="w-12 h-12 rounded-2xl bg-mintBg text-[#00B050] flex items-center justify-center text-xl shadow-sm border border-emerald-200">
+                        <i class="fa-solid fa-box-archive"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-slate-900">Supplier</h3>
+                        <p class="text-xs text-slate-500 font-medium">Jual limbah tekstil / eceng gondok Anda.</p>
+                    </div>
+                </div>
+                <form onsubmit="handleSupplierSubmit(event)" class="space-y-4">
+                    <div>
+                        <input type="text" id="sup-nama" required placeholder="Nama Lengkap / Instansi (Rahasia)" class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none text-sm text-slate-700 bg-slate-50/50">
+                    </div>
+                    <div>
+                        <input type="tel" id="sup-kontak" required placeholder="Nomor WhatsApp Aktif" class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none text-sm text-slate-700 bg-slate-50/50">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <select id="sup-jenis" required class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none bg-slate-50/50 text-sm text-slate-500">
+                                <option value="" disabled selected>Jenis Limbah...</option>
+                                <option value="Limbah Serat Eceng Gondok Kering">Limbah Serat Eceng Gondok Kering</option>
+                                <option value="Sisa Potongan Kain / Limbah Tekstil Konveksi">Sisa Potongan Kain / Limbah Tekstil Konveksi</option>
+                                <option value="Benang Daur Ulang">Benang Daur Ulang</option>
+                            </select>
+                        </div>
+                        <div>
+                            <input type="text" id="sup-berat" required placeholder="Berat (Kg)" class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none text-sm text-slate-700 bg-slate-50/50">
+                        </div>
+                    </div>
+                    <div>
+                        <textarea rows="3" id="sup-alamat" required placeholder="Alamat Pengambilan (Rahasia)" class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none text-sm text-slate-700 bg-slate-50/50"></textarea>
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full bg-[#111827] hover:bg-black text-white font-bold py-4 rounded-2xl shadow-xl transition text-sm tracking-wide">
+                            Daftarkan Limbah
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="stakeholder-customer" class="stakeholder-content hidden bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-6 max-w-4xl mx-auto relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-brandPurple text-white text-[11px] font-bold px-4 py-1.5 rounded-bl-2xl shadow-sm flex items-center space-x-1.5">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Secure Transaction</span>
+                </div>
+                <div class="flex items-center space-x-4 mb-2">
+                    <div class="w-12 h-12 rounded-2xl bg-brandPurple-bg text-brandPurple flex items-center justify-center text-xl shadow-sm border border-purple-200">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-slate-900">Customer</h3>
+                        <p class="text-xs text-slate-500 font-medium">Beli bahan baku murah untuk UMKM Anda.</p>
+                    </div>
+                </div>
+                <form onsubmit="handleCustomerSubmit(event)" class="space-y-4">
+                    <div>
+                        <input type="text" id="cus-nama" required placeholder="Nama UMKM / Perajin" class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none text-sm text-slate-700 bg-slate-50/50">
+                    </div>
+                    <div>
+                        <input type="text" id="cus-kontak" required placeholder="Nomor Kontak (Rahasia)" class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none text-sm text-slate-700 bg-slate-50/50">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <select id="cus-bahan" required class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none bg-slate-50/50 text-sm text-slate-500">
+                                <option value="" disabled selected>Bahan Dicari...</option>
+                                <option value="Serat Eceng Gondok Olahan">Serat Eceng Gondok Olahan</option>
+                                <option value="Patchwork Limbah Tekstil">Patchwork Limbah Tekstil</option>
+                                <option value="Benang Daur Ulang Tekstil">Benang Daur Ulang Tekstil</option>
+                            </select>
+                        </div>
+                        <div>
+                            <input type="text" id="cus-kebutuhan" required placeholder="Kebutuhan (Kg)" class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none text-sm text-slate-700 bg-slate-50/50">
+                        </div>
+                    </div>
+                    <div>
+                        <textarea rows="3" id="cus-alamat" required placeholder="Alamat Pengiriman (Rahasia)" class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none text-sm text-slate-700 bg-slate-50/50"></textarea>
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full bg-brandPurple hover:bg-brandPurple-dark text-white font-bold py-4 rounded-2xl shadow-xl transition text-sm tracking-wide">
+                            Pesan Bahan Baku
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Volunteers Section -->
+        <section id="page-volunteer" class="page-section space-y-8">
+            <div class="relative overflow-hidden rounded-3xl bg-[#238c53] text-white p-8 md:p-14 shadow-2xl">
+                <div class="absolute inset-0 opacity-10 pointer-events-none flex flex-wrap gap-10 p-6 justify-around items-center">
+                    <i class="fa-solid fa-heart text-5xl"></i><i class="fa-solid fa-heart text-6xl"></i><i class="fa-solid fa-heart text-4xl"></i>
+                    <i class="fa-solid fa-heart text-6xl"></i><i class="fa-solid fa-heart text-5xl"></i><i class="fa-solid fa-heart text-7xl"></i>
+                </div>
+
+                <div class="relative z-10 text-center max-w-2xl mx-auto mb-8 space-y-3">
+                    <span class="text-xs font-bold uppercase tracking-widest text-emerald-100">VOLUNTEER ROLES</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight">Jadilah Agen Perubahan</h2>
+                    <p class="text-slate-100 text-sm md:text-base leading-relaxed">Tidak punya bahan untuk dijual atau dibeli? Anda tetap bisa berkontribusi dengan tenaga dan suara Anda!</p>
+                </div>
+
+                <div class="flex justify-center mb-8 relative z-10">
+                    <div class="flex space-x-2 bg-white/25 backdrop-blur-md p-1.5 rounded-2xl shadow-sm border border-white/30">
+                        <button onclick="switchVolunteerTab('field')" id="btn-tab-field" class="volunteer-tab-btn px-6 py-2.5 rounded-xl text-sm font-semibold transition bg-white text-emerald-900 shadow-sm">Field Volunteer</button>
+                        <button onclick="switchVolunteerTab('digital')" id="btn-tab-digital" class="volunteer-tab-btn px-6 py-2.5 rounded-xl text-sm font-semibold transition text-white hover:bg-white/10">Digital Volunteer</button>
+                    </div>
+                </div>
+
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <div id="volunteer-field" class="volunteer-content bg-white/15 backdrop-blur-xl p-8 rounded-3xl border border-white/25 shadow-2xl flex flex-col justify-between text-white">
+                        <div class="space-y-6">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-800 text-white flex items-center justify-center text-2xl shadow-lg">
+                                <i class="fa-solid fa-people-group"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-black mb-3">Field Volunteer</h3>
+                                <p class="text-sm text-slate-100 leading-relaxed">Turun langsung ke lapangan bersama komunitas untuk mengumpulkan eceng gondok di perairan dan mengelola limbah domestik di titik yang telah dilaporkan warga.</p>
+                            </div>
+                        </div>
+                        <div class="pt-8 space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-emerald-100 uppercase mb-2">Upload CV / Portofolio (PDF/Doc)</label>
+                                <div class="flex items-center space-x-3 bg-white/15 p-2.5 rounded-xl border border-white/30">
+                                    <label class="cursor-pointer bg-white text-emerald-900 font-semibold px-4 py-2 rounded-lg text-xs hover:bg-slate-100 transition shadow-sm">
+                                        <span>Choose file</span>
+                                        <input type="file" id="cv-field" accept=".pdf,.doc,.docx" class="hidden" onchange="updateCvName(this, 'cv-label-1')">
+                                    </label>
+                                    <span id="cv-label-1" class="text-xs text-slate-200 truncate italic">No file chosen</span>
+                                </div>
+                            </div>
+                            <button onclick="openVolunteerModal('Field Volunteer')" class="w-full bg-white hover:bg-slate-100 text-emerald-900 font-extrabold py-4 rounded-2xl transition text-sm shadow-lg">
+                                Daftar Field Volunteer
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="volunteer-digital" class="volunteer-content hidden bg-white/15 backdrop-blur-xl p-8 rounded-3xl border border-white/25 shadow-2xl flex flex-col justify-between text-white">
+                        <div class="space-y-6">
+                            <div class="w-14 h-14 rounded-2xl bg-brandPurple text-white flex items-center justify-center text-2xl shadow-lg">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-black mb-3">Digital Volunteer</h3>
+                                <p class="text-sm text-slate-100 leading-relaxed">Bantu kampanye GreenTera melalui media sosial. Edukasi masyarakat tentang ekonomi sirkular, buat konten kreatif, dan viralkan gerakan lingkungan ini dari rumah.</p>
+                            </div>
+                        </div>
+                        <div class="pt-8 space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-emerald-100 uppercase mb-2">Upload CV / Portofolio (PDF/Doc)</label>
+                                <div class="flex items-center space-x-3 bg-white/15 p-2.5 rounded-xl border border-white/30">
+                                    <label class="cursor-pointer bg-white text-brandPurple font-semibold px-4 py-2 rounded-lg text-xs hover:bg-slate-100 transition shadow-sm">
+                                        <span>Choose file</span>
+                                        <input type="file" id="cv-digital" accept=".pdf,.doc,.docx" class="hidden" onchange="updateCvName(this, 'cv-label-2')">
+                                    </label>
+                                    <span id="cv-label-2" class="text-xs text-slate-200 truncate italic">No file chosen</span>
+                                </div>
+                            </div>
+                            <button onclick="openVolunteerModal('Digital Volunteer')" class="w-full bg-brandPurple hover:bg-purple-700 text-white font-extrabold py-4 rounded-2xl transition text-sm shadow-lg">
+                                Daftar Digital Volunteer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="page-dashboard" class="page-section space-y-8">
+            <div class="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm text-center space-y-3 max-w-4xl mx-auto">
+                <span class="text-xs font-bold uppercase tracking-wider text-[#00B050]">IMPACT DASHBOARD</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Jejak Langkah Hijau Kita</h2>
+                <p class="text-slate-600 text-sm max-w-lg mx-auto">Peta sebaran limbah dan capaian yang telah kita ubah menjadi nilai ekonomi bersama.</p>
+                <div class="inline-flex items-center space-x-2 bg-amber-50 text-amber-800 px-4 py-2 rounded-xl text-xs font-semibold border border-amber-200 shadow-sm mt-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>Peta ini publik, namun data pribadi supplier/customer 100% disembunyikan.</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <h3 class="text-3xl font-black text-[#00B050] mb-1">2.4T</h3>
+                    <p class="text-xs text-slate-500 font-semibold">Limbah Terkelola (Ton)</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <h3 class="text-3xl font-black text-brandPurple mb-1">142</h3>
+                    <p class="text-xs text-slate-500 font-semibold">UMKM Terhubung</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <h3 class="text-3xl font-black text-slate-900 mb-1">85</h3>
+                    <p class="text-xs text-slate-500 font-semibold">Titik Laporan Aktif</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <h3 class="text-3xl font-black text-purple-700 mb-1">850+</h3>
+                    <p class="text-xs text-slate-500 font-semibold">Relawan Bergabung</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4 max-w-4xl mx-auto">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-bold text-slate-900">Peta Sebaran Titik Limbah (Publik)</h3>
+                    <div class="flex items-center space-x-4 text-xs font-semibold">
+                        <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 mr-1.5"></span> Eceng Gondok</span>
+                        <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 mr-1.5"></span> Tekstil</span>
+                    </div>
+                </div>
+                <div id="map-container" class="w-full h-80 rounded-3xl bg-slate-50 border border-slate-200 relative overflow-hidden flex items-center justify-center cursor-grab active:cursor-grabbing select-none">
+                    <div id="map-pannable" class="absolute inset-[-100%] w-[300%] h-[300%] transition-transform duration-75 ease-out flex items-center justify-center" style="transform: translate(0px, 0px);">
+                        <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#7C3AED_1px,transparent_1px)] [background-size:24px_24px]"></div>
+                        <div class="absolute inset-0 grid grid-cols-6 grid-rows-6">
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[-15deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[15deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[-10deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[10deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[15deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[-10deg] select-none">API KEY REQUIRED</div>
+                            
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[10deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[-15deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[15deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[-10deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[5deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[-5deg] select-none">API KEY REQUIRED</div>
+
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[-15deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[15deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[-10deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[10deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[-20deg] select-none">API KEY REQUIRED</div>
+                            <div class="border border-slate-200/60 flex items-center justify-center p-4 text-slate-300 font-bold text-xs tracking-widest rotate-[20deg] select-none">API KEY REQUIRED</div>
+                        </div>
+
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="relative w-96 h-96">
+                                <span class="absolute top-[40%] left-[45%] w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-md animate-ping"></span>
+                                <span class="absolute top-[40%] left-[45%] w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-md"></span>
+                                <span class="absolute top-[48%] left-[52%] w-3.5 h-3.5 rounded-full bg-purple-600 shadow-md"></span>
+                                <span class="absolute bottom-[35%] right-[40%] w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-md"></span>
+                                <span class="absolute bottom-[30%] right-[32%] w-3.5 h-3.5 rounded-full bg-purple-600 shadow-md"></span>
+                                <span class="absolute top-[25%] right-[28%] w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-md"></span>
+                                <span class="absolute bottom-[20%] left-[30%] w-3.5 h-3.5 rounded-full bg-purple-600 shadow-md"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur border border-slate-200 rounded-xl p-1.5 shadow-sm flex flex-col space-y-1">
+                        <button onclick="zoomMap(1.2)" class="w-7 h-7 flex items-center justify-center text-slate-700 hover:bg-slate-100 rounded-lg text-sm font-bold">+</button>
+                        <button onclick="zoomMap(0.8)" class="w-7 h-7 flex items-center justify-center text-slate-700 hover:bg-slate-100 rounded-lg text-sm font-bold">-</button>
+                    </div>
+                    <div class="absolute bottom-2 right-3 z-10 text-[10px] text-slate-400 bg-white/80 px-2 py-0.5 rounded">Leaflet | © OpenStreetMap contributors © CARTO</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity Section -->
+        <section id="page-activity" class="page-section space-y-8">
+            <div class="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm text-center space-y-3 max-w-4xl mx-auto">
+                <span class="text-xs font-bold uppercase tracking-wider text-brandPurple">AKTIVITAS SAYA</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Riwayat Pengajuan & Transaksi</h2>
+                <p class="text-slate-600 text-sm max-w-lg mx-auto">Daftar lengkap formulir Purchase, Sales, Location Mapping, dan Submission Volunteer yang telah Anda kirimkan.</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto space-y-6">
+                <div class="flex border-b border-slate-200 overflow-x-auto space-x-6 pb-2">
+                    <button onclick="switchActivityTab('all')" id="act-tab-all" class="act-tab font-bold text-sm text-brandPurple border-b-2 border-brandPurple pb-2 whitespace-nowrap">Semua Aktivitas</button>
+                    <button onclick="switchActivityTab('mapping')" id="act-tab-mapping" class="act-tab font-semibold text-sm text-slate-500 hover:text-slate-800 pb-2 whitespace-nowrap">Location Mapping</button>
+                    <button onclick="switchActivityTab('sales')" id="act-tab-sales" class="act-tab font-semibold text-sm text-slate-500 hover:text-slate-800 pb-2 whitespace-nowrap">Sales (Supplier)</button>
+                    <button onclick="switchActivityTab('purchase')" id="act-tab-purchase" class="act-tab font-semibold text-sm text-slate-500 hover:text-slate-800 pb-2 whitespace-nowrap">Purchase (Customer)</button>
+                    <button onclick="switchActivityTab('volunteer')" id="act-tab-volunteer" class="act-tab font-semibold text-sm text-slate-500 hover:text-slate-800 pb-2 whitespace-nowrap">Volunteer Submission</button>
+                </div>
+
+                <div id="activity-list-container" class="space-y-4">
+                    <!-- Dynamic Activity Items Rendered Here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="page-profile" class="page-section space-y-8">
+            <div class="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm text-center space-y-3 max-w-3xl mx-auto">
+                <span class="text-xs font-bold uppercase tracking-wider text-brandPurple">PENGATURAN PROFIL</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Kelola Informasi Akun Anda</h2>
+                <p class="text-slate-600 text-sm max-w-md mx-auto">Perbarui data diri, NIK, email, kontak, serta password akun GreenTera dengan aman.</p>
+            </div>
+
+            <div class="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm max-w-3xl mx-auto">
+                <form onsubmit="handleProfileUpdate(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Nama Lengkap</label>
+                            <input type="text" id="prof-nama" required value="Pengguna GreenTera" class="w-full px-4 py-3.5 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-brandPurple outline-none transition text-sm text-slate-700 bg-slate-50/50">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-2">NIK KTP</label>
+                            <input type="text" id="prof-nik" required placeholder="320xxxxxxxxxxxxx" class="w-full px-4 py-3.5 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-brandPurple outline-none transition text-sm text-slate-700 bg-slate-50/50">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Email</label>
+                            <input type="email" id="prof-email" required value="member@greentera.id" class="w-full px-4 py-3.5 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-brandPurple outline-none transition text-sm text-slate-700 bg-slate-50/50">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Nomor Telepon / WhatsApp</label>
+                            <input type="tel" id="prof-telp" required placeholder="08xxxxxxxxxx" class="w-full px-4 py-3.5 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-brandPurple outline-none transition text-sm text-slate-700 bg-slate-50/50">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Password Baru / Ubah Password</label>
+                        <input type="password" id="prof-pass" placeholder="••••••••" class="w-full px-4 py-3.5 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-brandPurple outline-none transition text-sm text-slate-700 bg-slate-50/50">
+                    </div>
+                    <div class="pt-2">
+                        <button type="submit" class="w-full bg-brandPurple hover:bg-brandPurple-dark text-white font-bold py-4 rounded-2xl shadow-xl transition duration-200 text-sm tracking-wide">
+                            Simpan Perubahan Profil <i class="fa-solid fa-floppy-disk ml-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl relative space-y-6">
+            <button onclick="closeAuthModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center space-y-2">
+                <div class="w-14 h-14 bg-brandPurple-bg text-brandPurple rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-sm">
+                    <i id="auth-modal-icon" class="fa-solid fa-right-to-bracket"></i>
+                </div>
+                <h3 id="auth-modal-title" class="text-2xl font-black text-slate-900">Masuk ke GreenTera</h3>
+                <p id="auth-modal-subtitle" class="text-xs text-slate-500">Akses akun Anda untuk mengelola aktivitas hijau.</p>
+            </div>
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div id="auth-name-field" class="hidden">
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Nama Lengkap</label>
+                    <input type="text" id="auth-name" placeholder="Nama Anda" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Email / No. WhatsApp</label>
+                    <input type="text" id="auth-credential" required placeholder="email@domain.com atau 08xx" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Password</label>
+                    <input type="password" id="auth-password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brandPurple outline-none text-sm">
+                </div>
+                <button type="submit" id="auth-submit-btn" class="w-full bg-brandPurple hover:bg-brandPurple-dark text-white font-bold py-3.5 rounded-2xl shadow-lg transition text-sm">
+                    Masuk Sekarang
+                </button>
+            </form>
+            <div class="text-center pt-2">
+                <button onclick="toggleAuthMode()" id="auth-toggle-link" class="text-xs font-bold text-brandPurple hover:underline">
+                    Belum punya akun? Daftar di sini
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-[#0B132B] text-slate-400 border-t border-slate-800 mt-20 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+            <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                    <span class="text-xl font-bold text-white">GreenTera</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed max-w-sm">Platform inovasi Digital Green Economy yang mengintegrasikan pelaporan lingkungan, ekonomi sirkular untuk UMKM, dan aksi relawan.</p>
+                <div class="flex space-x-3 text-slate-400 text-base">
+                    <a href="#" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-brandPurple hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-brandPurple hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-brandPurple hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 text-xs">
+                <div>
+                    <h4 class="font-bold text-white uppercase tracking-wider mb-3">Menu Utama</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" onclick="switchPage('program-overview')" class="hover:text-white transition">Program Overview</a></li>
+                        <li><a href="#" onclick="switchPage('mapping')" class="hover:text-white transition">Lapor Lokasi</a></li>
+                        <li><a href="#" onclick="switchPage('stakeholders')" class="hover:text-white transition">Supplier & Customer</a></li>
+                        <li><a href="#" onclick="switchPage('volunteer')" class="hover:text-white transition">Gabung Relawan</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white uppercase tracking-wider mb-3">Legal & Privasi</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="hover:text-white transition">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="hover:text-white transition">Keamanan Data (E2EE)</a></li>
+                        <li><a href="#" class="hover:text-white transition">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:items-end justify-between h-full space-y-4 text-xs text-slate-500">
+                <p>© 2026 GreenTera - Digital Green Economy. All rights reserved.</p>
+                <div class="flex items-center space-x-1">
+                    <span>Made with</span>
+                    <i class="fa-solid fa-heart text-red-500"></i>
+                    <span>for the Earth</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-box" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-2xl transform translate-y-32 opacity-0 transition-all duration-300 flex items-center space-x-3">
+        <i class="fa-solid fa-circle-check text-purple-400 text-xl"></i>
+        <div>
+            <h4 class="font-bold text-sm" id="toast-title">Berhasil!</h4>
+            <p class="text-xs text-slate-300" id="toast-desc">Aksi Anda telah diproses dengan aman.</p>
+        </div>
+    </div>
+
+    <script>
+        let userActivities = [];
+        let isUserLoggedIn = false;
+        let currentAuthMode = 'login';
+
+        function dismissSplash() {
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+                splash.style.opacity = '0';
+                splash.style.visibility = 'hidden';
+                setTimeout(() => splash.remove(), 500);
+            }
+        }
+
+        function switchPage(pageId) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(sec => sec.classList.remove('active'));
+
+            const target = document.getElementById('page-' + pageId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (pageId === 'activity') {
+                    renderActivities('all');
+                }
+            }
+
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('text-brandPurple', 'bg-white', 'shadow-sm');
+                btn.classList.add('text-slate-600');
+            });
+
+            const activeNav = document.getElementById('nav-' + pageId);
+            if (activeNav) {
+                activeNav.classList.remove('text-slate-600');
+                activeNav.classList.add('text-brandPurple', 'bg-white', 'shadow-sm');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('user-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function openAuthModal(mode) {
+            currentAuthMode = mode;
+            const modal = document.getElementById('auth-modal');
+            const title = document.getElementById('auth-modal-title');
+            const subtitle = document.getElementById('auth-modal-subtitle');
+            const icon = document.getElementById('auth-modal-icon');
+            const btn = document.getElementById('auth-submit-btn');
+            const nameField = document.getElementById('auth-name-field');
+            const toggleLink = document.getElementById('auth-toggle-link');
+
+            modal.classList.remove('hidden');
+
+            if (mode === 'login') {
+                title.innerText = 'Masuk ke GreenTera';
+                subtitle.innerText = 'Akses akun Anda untuk mengelola aktivitas hijau.';
+                icon.className = 'fa-solid fa-right-to-bracket';
+                btn.innerText = 'Masuk Sekarang';
+                nameField.classList.add('hidden');
+                toggleLink.innerText = 'Belum punya akun? Daftar di sini';
+            } else {
+                title.innerText = 'Daftar Akun Baru';
+                subtitle.innerText = 'Bergabunglah dengan ekosistem digital green economy.';
+                icon.className = 'fa-solid fa-user-plus';
+                btn.innerText = 'Daftar Akun';
+                nameField.classList.remove('hidden');
+                toggleLink.innerText = 'Sudah punya akun? Masuk di sini';
+            }
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        }
+
+        function toggleAuthMode() {
+            openAuthModal(currentAuthMode === 'login' ? 'register' : 'login');
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const credential = document.getElementById('auth-credential').value;
+            isUserLoggedIn = true;
+            document.getElementById('auth-status-text').innerText = credential;
+            closeAuthModal();
+            showToast(currentAuthMode === 'login' ? 'Berhasil Masuk!' : 'Akun Terdaftar!', 'Selamat datang kembali di platform GreenTera.');
+        }
+
+        function switchStakeholderTab(tab) {
+            const supContent = document.getElementById('stakeholder-supplier');
+            const cusContent = document.getElementById('stakeholder-customer');
+            const btnSup = document.getElementById('btn-tab-supplier');
+            const btnCus = document.getElementById('btn-tab-customer');
+
+            if (tab === 'supplier') {
+                supContent.classList.remove('hidden');
+                cusContent.classList.add('hidden');
+                btnSup.classList.add('bg-white', 'text-brandPurple', 'shadow-sm');
+                btnSup.classList.remove('text-slate-600');
+                btnCus.classList.remove('bg-white', 'text-brandPurple', 'shadow-sm');
+                btnCus.classList.add('text-slate-600');
+            } else {
+                supContent.classList.add('hidden');
+                cusContent.classList.remove('hidden');
+                btnCus.classList.add('bg-white', 'text-brandPurple', 'shadow-sm');
+                btnCus.classList.remove('text-slate-600');
+                btnSup.classList.remove('bg-white', 'text-brandPurple', 'shadow-sm');
+                btnSup.classList.add('text-slate-600');
+            }
+        }
+
+        function switchVolunteerTab(tab) {
+            const fieldContent = document.getElementById('volunteer-field');
+            const digitalContent = document.getElementById('volunteer-digital');
+            const btnField = document.getElementById('btn-tab-field');
+            const btnDigital = document.getElementById('btn-tab-digital');
+
+            if (tab === 'field') {
+                fieldContent.classList.remove('hidden');
+                digitalContent.classList.add('hidden');
+                btnField.classList.add('bg-white', 'text-emerald-900', 'shadow-sm');
+                btnField.classList.remove('text-white');
+                btnDigital.classList.remove('bg-white', 'text-emerald-900', 'shadow-sm');
+                btnDigital.classList.add('text-white');
+            } else {
+                fieldContent.classList.add('hidden');
+                digitalContent.classList.remove('hidden');
+                btnDigital.classList.add('bg-white', 'text-emerald-900', 'shadow-sm');
+                btnDigital.classList.remove('text-white');
+                btnField.classList.remove('bg-white', 'text-emerald-900', 'shadow-sm');
+                btnField.classList.add('text-white');
+            }
+        }
+
+        function switchActivityTab(filter) {
+            const tabs = document.querySelectorAll('.act-tab');
+            tabs.forEach(t => {
+                t.classList.remove('text-brandPurple', 'border-b-2', 'border-brandPurple', 'font-bold');
+                t.classList.add('text-slate-500', 'font-semibold');
+            });
+
+            const activeTab = document.getElementById('act-tab-' + filter);
+            if (activeTab) {
+                activeTab.classList.remove('text-slate-500', 'font-semibold');
+                activeTab.classList.add('text-brandPurple', 'border-b-2', 'border-brandPurple', 'font-bold');
+            }
+            renderActivities(filter);
+        }
+
+        function renderActivities(filter) {
+            const container = document.getElementById('activity-list-container');
+            if (!container) return;
+
+            let filtered = userActivities;
+            if (filter !== 'all') {
+                filtered = userActivities.filter(item => item.type === filter);
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white p-12 rounded-3xl border border-slate-200 text-center space-y-4">
+                        <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-2xl mx-auto flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800">Belum Ada Aktivitas Tersimpan</h3>
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto">Silakan lakukan pengisian form Location Mapping, Sales (Supplier), Purchase (Customer), atau Volunteer Submission terlebih dahulu.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(act => {
+                let badgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+                let icon = 'fa-map-location-dot';
+                let title = act.title;
+
+                if (act.type === 'sales') {
+                    badgeColor = 'bg-blue-50 text-blue-700 border-blue-200';
+                    icon = 'fa-box-archive';
+                } else if (act.type === 'purchase') {
+                    badgeColor = 'bg-purple-50 text-purple-700 border-purple-200';
+                    icon = 'fa-store';
+                } else if (act.type === 'volunteer') {
+                    badgeColor = 'bg-amber-50 text-amber-700 border-amber-200';
+                    icon = 'fa-hands-holding-child';
+                }
+
+                html += `
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 rounded-2xl ${badgeColor} border flex items-center justify-center text-xl shrink-0 shadow-sm">
+                                <i class="fa-solid ${icon}"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${badgeColor}">${act.type}</span>
+                                    <span class="text-xs text-slate-400">${act.date}</span>
+                                </div>
+                                <h4 class="font-bold text-slate-900 text-base">${title}</h4>
+                                <p class="text-xs text-slate-600">${act.detail}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 self-end md:self-center">
+                            <span class="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">Terverifikasi E2EE</span>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function showToast(title, desc) {
+            const toast = document.getElementById('toast-box');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-desc').innerText = desc;
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 4000);
+        }
+
+        function updateFileName(input) {
+            const label = document.getElementById('file-chosen-label');
+            if (input.files && input.files.length > 0) {
+                label.innerText = input.files[0].name;
+            } else {
+                label.innerText = 'No file chosen';
+            }
+        }
+
+        function updateCvName(input, labelId) {
+            const label = document.getElementById(labelId);
+            if (input.files && input.files.length > 0) {
+                label.innerText = input.files[0].name;
+            } else {
+                label.innerText = 'No file chosen';
+            }
+        }
+
+        function handleReportSubmit(e) {
+            e.preventDefault();
+            const lokasi = document.getElementById('rep-lokasi').value;
+            const jenis = document.getElementById('rep-jenis').value;
+            const volume = document.getElementById('rep-volume').value;
+
+            userActivities.unshift({
+                type: 'mapping',
+                title: lokasi,
+                detail: `Jenis: ${jenis} | Volume: ${volume}`,
+                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+            });
+
+            showToast('Laporan Terkirim!', 'Titik limbah berhasil dipetakan dan masuk antrean verifikasi.');
+            e.target.reset();
+            document.getElementById('file-chosen-label').innerText = 'No file chosen';
+        }
+
+        function handleSupplierSubmit(e) {
+            e.preventDefault();
+            const nama = document.getElementById('sup-nama').value;
+            const jenis = document.getElementById('sup-jenis').value;
+            const berat = document.getElementById('sup-berat').value;
+
+            userActivities.unshift({
+                type: 'sales',
+                title: `Sales (Supplier) - ${nama}`,
+                detail: `Limbah: ${jenis} | Berat: ${berat} Kg`,
+                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+            });
+
+            showToast('Penawaran Tersimpan', 'Data supplier dan penawaran bahan baku Anda terlindungi secara rahasia.');
+            e.target.reset();
+        }
+
+        function handleCustomerSubmit(e) {
+            e.preventDefault();
+            const nama = document.getElementById('cus-nama').value;
+            const bahan = document.getElementById('cus-bahan').value;
+            const kebutuhan = document.getElementById('cus-kebutuhan').value;
+
+            userActivities.unshift({
+                type: 'purchase',
+                title: `Purchase (Customer) - ${nama}`,
+                detail: `Bahan: ${bahan} | Kebutuhan: ${kebutuhan} Kg`,
+                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+            });
+
+            showToast('Pesanan Berhasil', 'Pesanan bahan baku UMKM Anda telah tercatat dengan aman.');
+            e.target.reset();
+        }
+
+        function openVolunteerModal(roleName) {
+            userActivities.unshift({
+                type: 'volunteer',
+                title: `Submission Volunteer - ${roleName}`,
+                detail: `Pendaftaran posisi ${roleName} berhasil diajukan dengan CV terlampir.`,
+                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+            });
+
+            showToast('Pendaftaran Relawan', 'Formulir pendaftaran ' + roleName + ' & CV berhasil dikirim. Tim kami akan segera menghubungi Anda.');
+        }
+
+        function handleProfileUpdate(e) {
+            e.preventDefault();
+            showToast('Profil Diperbarui', 'Informasi akun GreenTera berhasil disimpan.');
+        }
+
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let currentX = 0, currentY = 0;
+        let currentScale = 1;
+
+        const mapContainer = document.getElementById('map-container');
+        const mapPannable = document.getElementById('map-pannable');
+
+        if (mapContainer && mapPannable) {
+            mapContainer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX - currentX;
+                startY = e.clientY - currentY;
+                mapContainer.style.cursor = 'grabbing';
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                currentX = e.clientX - startX;
+                currentY = e.clientY - startY;
+                updateMapTransform();
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+                if (mapContainer) mapContainer.style.cursor = 'grab';
+            });
+
+            mapContainer.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    startX = e.touches[0].clientX - currentX;
+                    startY = e.touches[0].clientY - currentY;
+                }
+            });
+
+            mapContainer.addEventListener('touchmove', (e) => {
+                if (!isDragging || e.touches.length !== 1) return;
+                currentX = e.touches[0].clientX - startX;
+                currentY = e.touches[0].clientY - startY;
+                updateMapTransform();
+            });
+
+            mapContainer.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+        }
+
+        function updateMapTransform() {
+            if (mapPannable) {
+                mapPannable.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
+            }
+        }
+
+        function zoomMap(factor) {
+            currentScale = Math.max(0.8, Math.min(2.5, currentScale * factor));
+            updateMapTransform();
+        }
+    </script>
+</body>
+</html>
